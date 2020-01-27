@@ -2,6 +2,10 @@
 HATEOAS-compatible Restful Resource descriptions, with formatters to represent 
 the resources in json- or xml format.
 
+[![Build Status](https://travis-ci.org/Stratadox/RestResource.svg?branch=master)](https://travis-ci.org/Stratadox/RestResource)
+[![Coverage Status](https://coveralls.io/repos/github/Stratadox/RestResource/badge.svg?branch=master)](https://coveralls.io/github/Stratadox/RestResource?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Stratadox/RestResource/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Stratadox/RestResource/?branch=master)
+
 ## Installation
 Install with `composer require stratadox/rest-resource`
 
