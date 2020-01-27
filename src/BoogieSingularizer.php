@@ -32,8 +32,10 @@ final class BoogieSingularizer implements Singularizer
 
     public static function in(string $locale): Singularizer
     {
-        return new self(Inflector::get(
-            self::LANGUAGES[strtolower($locale)] ?? strtolower($locale)),
+        return new self(
+            Inflector::get(
+                self::LANGUAGES[strtolower($locale)] ?? strtolower($locale)
+            ),
             Inflector::get('en')
         );
     }
