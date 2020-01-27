@@ -1,0 +1,31 @@
+{
+  "name": "stratadox/rest-resource",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Stratadox",
+      "homepage": "http://www.stratadox.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Stratadox\\RestResource\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Stratadox\\RestResource\\Test\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=7.2",
+    "stratadox/immutable-collection": "^1.1",
+    "icanboogie/inflector": "^2.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^8.2",
+    "phpstan/phpstan": "^0.11.12",
+    "php-coveralls/php-coveralls": "^2.1"
+  }
+}
