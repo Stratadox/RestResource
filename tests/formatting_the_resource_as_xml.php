@@ -524,6 +524,62 @@ class formatting_the_resource_as_xml extends TestCase
     }
 
     /** @test */
+    function formatting_a_resource_with_a_lot_of_nested_elements()
+    {
+        $resource = new MinimalResource([
+            'lists' => [
+                [1, 2, 3, 4],
+                ['A', 'B', 'C'],
+                [['a' => 1], ['b' => 2], ['c' => 3]],
+                [[1, 2, 3], [1, 2, 3]],
+            ]
+        ]);
+
+        $this->assertXmlStringEqualsXmlString(
+            '<?xml version="1.0"?>
+            <minimal-resource>
+              <lists>
+                <list>
+                  <item>1</item>
+                  <item>2</item>
+                  <item>3</item>
+                  <item>4</item>
+                </list>
+                <list>
+                  <item>A</item>
+                  <item>B</item>
+                  <item>C</item>
+                </list>
+                <list>
+                  <item>
+                    <a>1</a>
+                  </item>
+                  <item>
+                    <b>2</b>
+                  </item>
+                  <item>
+                    <c>3</c>
+                  </item>
+                </list>
+                <list>
+                  <item>
+                    <item>1</item>
+                    <item>2</item>
+                    <item>3</item>
+                  </item>
+                  <item>
+                    <item>1</item>
+                    <item>2</item>
+                    <item>3</item>
+                  </item>
+                </list>
+              </lists>
+            </minimal-resource>',
+            $this->xml->from($resource)
+        );
+    }
+
+    /** @test */
     function not_formatting_resources_with_circular_references()
     {
         $array = [];

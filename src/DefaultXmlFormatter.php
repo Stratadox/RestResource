@@ -50,21 +50,32 @@ final class DefaultXmlFormatter implements ResourceFormatter
         }
     }
 
-    private function toSimpleXML(array $input, SimpleXMLElement $element): void
-    {
+    private function toSimpleXML(
+        array $input,
+        SimpleXMLElement $parent,
+        bool $alreadySingularized = false
+    ): void {
         foreach ($input as $key => $value) {
-            $name = is_numeric($key) ?
-                $this->singularizer->convert($element->getName()) :
-                str_replace(['<', '>'], '', (string) $key);
-            if (is_array($value)) {
-                $node = $element->addChild($name);
-                $this->toSimpleXML($value, $node);
+
+            if (is_numeric($key)) {
+                $name = $alreadySingularized ?
+                    'item' : $this->singularizer->convert($parent->getName());
+                $singularized = true;
             } else {
-                $element->addChild(
+                $name = str_replace(['<', '>'], '', (string) $key);
+                $singularized = false;
+            }
+
+            if (is_array($value)) {
+                $node = $parent->addChild($name);
+                $this->toSimpleXML($value, $node, $singularized);
+            } else {
+                $parent->addChild(
                     $name,
                     htmlspecialchars((string) $value, ENT_XML1)
                 );
             }
+
         }
     }
 }
