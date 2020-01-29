@@ -6,7 +6,7 @@ use Stratadox\ImmutableCollection\ImmutableCollection;
 
 final class Links extends ImmutableCollection
 {
-    public function __construct(Link ...$links)
+    private function __construct(Link ...$links)
     {
         parent::__construct(...$links);
     }
