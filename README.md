@@ -84,6 +84,39 @@ $this->assertXmlStringEqualsXmlString(
 );
 ```
 
+## Example (condensed xml)
+The same resource again, now formatted as xml with less verbosity:
+
+```php
+<?php
+
+use Stratadox\RestResource\BasicResource;
+use Stratadox\RestResource\CondensedXmlFormatter;
+use Stratadox\RestResource\Test\Fixture\TestRelation;
+use Stratadox\RestResource\Link;
+use Stratadox\RestResource\Links;
+
+$xml = new CondensedXmlFormatter('https://a.server.somewhere/');
+
+$resource = new BasicResource(
+    'hateoas-resource',
+    ['foo' => 'bar'],
+    Links::provide(
+        Link::to('foo/1', new TestRelation('Foo'))
+    )
+);
+
+$this->assertXmlStringEqualsXmlString(
+    '<?xml version="1.0"?>
+    <hateoas-resource foo="bar">
+      <links>
+        <link href="server/foo/1" rel="Foo" type="GET" />
+      </links>
+    </hateoas-resource>',
+    $xml->from($resource)
+);
+```
+
 ## Singularisation
 Formatting an xml document based on just an array structure is slightly more 
 challenging than converting to json.
@@ -131,6 +164,13 @@ However, we'd expect from xml something in the genre of:
         <id>2</id>
         <name>Bob</name>
     </person>
+</people>
+```
+Or
+```xml
+<people>
+    <person id="1" name="Alice" />
+    <person id="2" name="Bob" />
 </people>
 ```
 
@@ -203,6 +243,38 @@ $this->assertXmlStringEqualsXmlString(
                 <id>2</id>
                 <name>Bob</name>
             </item>
+        </people>
+    </people-resource>',
+    $xml->from($resource)
+);
+```
+Or, with less verbosity:
+
+```php
+<?php
+
+use Stratadox\RestResource\BasicResource;
+use Stratadox\RestResource\BasicSingularizer;
+use Stratadox\RestResource\CondensedXmlFormatter;
+use Stratadox\RestResource\Links;
+
+$xml = new CondensedXmlFormatter('/', new BasicSingularizer());
+
+$resource = new BasicResource(
+    'people-resource',
+    ['people' => [
+        ['id' => 1, 'name' => 'Alice'],
+        ['id' => 2, 'name' => 'Bob'],
+    ]],
+    Links::none()
+);
+
+$this->assertXmlStringEqualsXmlString(
+    '<?xml version="1.0"?>
+    <people-resource>
+        <people>
+            <item id="1" name="Alice" />
+            <item id="2" name="Bob" />
         </people>
     </people-resource>',
     $xml->from($resource)
