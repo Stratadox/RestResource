@@ -13,6 +13,7 @@ use Stratadox\RestResource\Links;
 use Stratadox\RestResource\ResourceFormatter;
 use Stratadox\RestResource\Type;
 use Stratadox\RestResource\Unformattable;
+use const INF;
 
 /**
  * @testdox formatting the resource as json
@@ -67,6 +68,64 @@ class formatting_the_resource_as_json extends TestCase
 
         $this->assertJsonStringEqualsJsonString(
             '{"minimal-resource": {"words": ["foo", "bar", "baz"]}}',
+            $this->json->from($resource)
+        );
+    }
+
+    /** @test */
+    function formatting_a_nested_resource()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource('child-resource', ['n' => 1], Links::none()),
+                new BasicResource('child-resource', ['n' => 2], Links::none()),
+                new BasicResource('child-resource', ['n' => 3], Links::none()),
+            ]],
+            Links::none()
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"nested-resource": {
+                "children": [
+                    {"child-resource": {"n":1}},
+                    {"child-resource": {"n":2}},
+                    {"child-resource": {"n":3}}
+                ]
+            }}',
+            $this->json->from($resource)
+        );
+    }
+
+    /** @test */
+    function formatting_a_twice_nested_resource()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource(
+                    'child-resource',
+                    ['grandchildren' => [
+                        new MinimalResource(['foo' => 'bar'])
+                    ]],
+                    Links::none()
+                ),
+            ]],
+            Links::none()
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"nested-resource": {
+                "children": [
+                    {"child-resource": {
+                        "grandchildren":[
+                            {"minimal-resource": {
+                                "foo":"bar"
+                            }}
+                        ]
+                    }}
+                ]
+            }}',
             $this->json->from($resource)
         );
     }
@@ -182,6 +241,71 @@ class formatting_the_resource_as_json extends TestCase
     }
 
     /** @test */
+    function formatting_a_nested_resource_where_the_children_have_links()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource('child-resource', ['n' => 1], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+                new BasicResource('child-resource', ['n' => 2], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+                new BasicResource('child-resource', ['n' => 3], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+            ]],
+            Links::provide(Link::to('bar', Type::get('Bar')))
+        );
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"nested-resource": {
+                "children": [
+                    {"child-resource": {
+                        "n":1,
+                        "links": [
+                            {
+                                "href": "server\/foo",
+                                "rel": "Foo",
+                                "type": "GET"
+                            }
+                        ]
+                    }},
+                    {"child-resource": {
+                        "n":2,
+                        "links": [
+                            {
+                                "href": "server\/foo",
+                                "rel": "Foo",
+                                "type": "GET"
+                            }
+                        ]
+                    }},
+                    {"child-resource": {
+                        "n":3,
+                        "links": [
+                            {
+                                "href": "server\/foo",
+                                "rel": "Foo",
+                                "type": "GET"
+                            }
+                        ]
+                    }}
+                ],
+                "links": [
+                    {
+                        "href": "server\/bar",
+                        "rel": "Bar",
+                        "type": "GET"
+                    }
+                ]
+            }}',
+            $this->json->from($resource)
+        );
+    }
+
+    /** @test */
     function not_formatting_resources_that_cannot_be_converted_to_json()
     {
         $resource = new BasicResource(
@@ -208,9 +332,27 @@ class formatting_the_resource_as_json extends TestCase
         );
 
         $this->expectException(Unformattable::class);
-        $this->expectExceptionMessage(
-            'Could not format the resource `bad-resource` as json, because: ' .
-            'Recursion detected'
+        $this->expectExceptionMessageMatches(
+            '/Could not format the resource `bad-resource` as json, because:' .
+            '(.*) recursion detected/i'
+        );
+
+        $this->json->from($resource);
+    }
+
+    /** @test */
+    function not_formatting_resources_with_infinity()
+    {
+        $resource = new BasicResource(
+            'bad-resource',
+            ['bad' => INF],
+            Links::none()
+        );
+
+        $this->expectException(Unformattable::class);
+        $this->expectExceptionMessageMatches(
+            '/Could not format the resource `bad-resource` as json, because:' .
+            '(.*) inf/i'
         );
 
         $this->json->from($resource);
