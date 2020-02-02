@@ -4,6 +4,8 @@ namespace Stratadox\RestResource;
 
 use SimpleXMLElement;
 use Throwable;
+use function array_walk_recursive;
+use function current;
 use function sprintf;
 
 abstract class XmlFormatter implements ResourceFormatter
@@ -36,7 +38,7 @@ abstract class XmlFormatter implements ResourceFormatter
         ));
         try {
             $this->toSimpleXML(
-                $resource->body() + $this->linksOf($resource, $this->baseUri),
+                current($this->prepare($resource)),
                 $xml
             );
             return (string) $xml->asXML();
@@ -51,4 +53,22 @@ abstract class XmlFormatter implements ResourceFormatter
         SimpleXMLElement $parent,
         bool $alreadySingularized = false
     ): void;
+
+    private function prepare(RestResource $resource): array
+    {
+        return [$resource->name() =>
+            $this->flatten($resource->body()) +
+            $this->linksOf($resource, $this->baseUri)
+        ];
+    }
+
+    private function flatten(array $body): array
+    {
+        array_walk_recursive($body, function (&$data) {
+            if ($data instanceof RestResource) {
+                $data = $this->prepare($data);
+            }
+        });
+        return $body;
+    }
 }

@@ -159,6 +159,70 @@ class formatting_the_resource_as_xml extends TestCase
     }
 
     /** @test */
+    function formatting_a_nested_resource()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource('child-resource', ['n' => 1], Links::none()),
+                new BasicResource('child-resource', ['n' => 2], Links::none()),
+                new BasicResource('child-resource', ['n' => 3], Links::none()),
+            ]],
+            Links::none()
+        );
+
+        $this->assertXmlStringEqualsXmlString(
+            '<?xml version="1.0"?>
+            <nested-resource>
+              <children>
+                <child><child-resource><n>1</n></child-resource></child>
+                <child><child-resource><n>2</n></child-resource></child>
+                <child><child-resource><n>3</n></child-resource></child>
+              </children>
+            </nested-resource>',
+            $this->xml->from($resource)
+        );
+    }
+
+    /** @test */
+    function formatting_a_twice_nested_resource()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource(
+                    'child-resource',
+                    ['grandchildren' => [
+                        new MinimalResource(['foo' => 'bar'])
+                    ]],
+                    Links::none()
+                ),
+            ]],
+            Links::none()
+        );
+
+        $this->assertXmlStringEqualsXmlString(
+            '<?xml version="1.0"?>
+            <nested-resource>
+              <children>
+                <child>
+                    <child-resource>
+                        <grandchildren>
+                            <grandchild>
+                              <minimal-resource>
+                                <foo>bar</foo>
+                              </minimal-resource>
+                            </grandchild>
+                        </grandchildren>
+                    </child-resource>
+                </child>
+              </children>
+            </nested-resource>',
+            $this->xml->from($resource)
+        );
+    }
+
+    /** @test */
     function formatting_a_resource_with_a_link()
     {
         $resource = new HateoasResource(
@@ -575,6 +639,72 @@ class formatting_the_resource_as_xml extends TestCase
                 </list>
               </lists>
             </minimal-resource>',
+            $this->xml->from($resource)
+        );
+    }
+
+    /** @test */
+    function formatting_a_nested_resource_where_the_children_have_links()
+    {
+        $resource = new BasicResource(
+            'nested-resource',
+            ['children' => [
+                new BasicResource('child-resource', ['n' => 1], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+                new BasicResource('child-resource', ['n' => 2], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+                new BasicResource('child-resource', ['n' => 3], Links::provide(
+                    Link::to('foo', Type::get('Foo'))
+                )),
+            ]],
+            Links::provide(Link::to('bar', Type::get('Bar')))
+        );
+
+        $this->assertXmlStringEqualsXmlString(
+            '<?xml version="1.0"?>
+            <nested-resource>
+                <children>
+                    <child><child-resource>
+                        <n>1</n>
+                        <links>
+                            <link>
+                              <href>server/foo</href>
+                              <rel>Foo</rel>
+                              <type>GET</type>
+                            </link>
+                        </links>
+                    </child-resource></child>
+                    <child><child-resource>
+                        <n>2</n>
+                        <links>
+                            <link>
+                              <href>server/foo</href>
+                              <rel>Foo</rel>
+                              <type>GET</type>
+                            </link>
+                        </links>
+                    </child-resource></child>
+                    <child><child-resource>
+                        <n>3</n>
+                        <links>
+                            <link>
+                              <href>server/foo</href>
+                              <rel>Foo</rel>
+                              <type>GET</type>
+                            </link>
+                        </links>
+                    </child-resource></child>
+                </children>
+                <links>
+                    <link>
+                      <href>server/bar</href>
+                      <rel>Bar</rel>
+                      <type>GET</type>
+                    </link>
+                </links>
+            </nested-resource>',
             $this->xml->from($resource)
         );
     }
