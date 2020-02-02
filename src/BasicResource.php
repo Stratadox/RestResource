@@ -2,7 +2,7 @@
 
 namespace Stratadox\RestResource;
 
-final class BasicResource implements Resource
+final class BasicResource implements RestResource
 {
     /** @var string */
     private $name;

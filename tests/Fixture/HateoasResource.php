@@ -3,9 +3,9 @@
 namespace Stratadox\RestResource\Test\Fixture;
 
 use Stratadox\RestResource\Links;
-use Stratadox\RestResource\Resource;
+use Stratadox\RestResource\RestResource;
 
-final class HateoasResource implements Resource
+final class HateoasResource implements RestResource
 {
     /** @var array */
     private $body;

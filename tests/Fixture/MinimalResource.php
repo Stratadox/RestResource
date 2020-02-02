@@ -3,9 +3,9 @@
 namespace Stratadox\RestResource\Test\Fixture;
 
 use Stratadox\RestResource\Links;
-use Stratadox\RestResource\Resource;
+use Stratadox\RestResource\RestResource;
 
-final class MinimalResource implements Resource
+final class MinimalResource implements RestResource
 {
     /** @var array */
     private $body;

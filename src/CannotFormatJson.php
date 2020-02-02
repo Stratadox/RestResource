@@ -8,7 +8,7 @@ use function sprintf;
 
 final class CannotFormatJson extends InvalidArgumentException implements Unformattable
 {
-    public static function because(Resource $resource, Throwable $reason): self
+    public static function because(RestResource $resource, Throwable $reason): self
     {
         return new self(sprintf(
             'Could not format the resource `%s` as json, because: %s',
@@ -17,7 +17,7 @@ final class CannotFormatJson extends InvalidArgumentException implements Unforma
         ), $reason->getCode(), $reason);
     }
 
-    public static function jsonError(Resource $resource, string $error): self
+    public static function jsonError(RestResource $resource, string $error): self
     {
         return new self(sprintf(
             'Could not format the resource `%s` as json, because: %s',
