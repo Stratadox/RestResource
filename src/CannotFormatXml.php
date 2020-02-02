@@ -8,7 +8,7 @@ use function sprintf;
 
 final class CannotFormatXml extends InvalidArgumentException implements Unformattable
 {
-    public static function because(RestResource $resource, Throwable $reason): self
+    public static function because(Resource $resource, Throwable $reason): self
     {
         return new self(sprintf(
             'Could not format the resource `%s` as xml, because: %s',

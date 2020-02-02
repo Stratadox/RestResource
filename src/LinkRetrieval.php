@@ -7,7 +7,7 @@ use function count;
 
 trait LinkRetrieval
 {
-    private function linksOf(RestResource $resource, string $baseUri): array
+    private function linksOf(Resource $resource, string $baseUri): array
     {
         if (!count($resource->links())) {
             return [];

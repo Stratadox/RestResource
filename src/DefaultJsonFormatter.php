@@ -19,7 +19,7 @@ final class DefaultJsonFormatter implements ResourceFormatter
         $this->baseUri = $baseUri;
     }
 
-    public function from(RestResource $resource): string
+    public function from(Resource $resource): string
     {
         try {
             $result = json_encode([

@@ -2,7 +2,7 @@
 
 namespace Stratadox\RestResource;
 
-interface RestResource
+interface Resource
 {
     /**
      * Retrieves the body or the resource.

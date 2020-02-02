@@ -28,7 +28,7 @@ abstract class XmlFormatter implements ResourceFormatter
         return new static($baseUri, BoogieSingularizer::in($locale));
     }
 
-    public function from(RestResource $resource): string
+    public function from(Resource $resource): string
     {
         $xml = new SimpleXMLElement(sprintf(
             '<?xml version="1.0"?><%s />',
