@@ -19,6 +19,8 @@
   },
   "require": {
     "php": ">=7.2",
+    "ext-json": "*",
+    "ext-simplexml": "*",
     "stratadox/immutable-collection": "^1.1",
     "icanboogie/inflector": "^2.0"
   },
