@@ -7,11 +7,11 @@ use Stratadox\RestResource\BasicResource;
 use Stratadox\RestResource\Test\Fixture\HateoasResource;
 use Stratadox\RestResource\Test\Fixture\MinimalResource;
 use Stratadox\RestResource\Test\Fixture\NoJson;
-use Stratadox\RestResource\Test\Fixture\TestRelation;
 use Stratadox\RestResource\DefaultJsonFormatter;
 use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
 use Stratadox\RestResource\ResourceFormatter;
+use Stratadox\RestResource\Type;
 use Stratadox\RestResource\Unformattable;
 
 /**
@@ -78,7 +78,7 @@ class formatting_the_resource_as_json extends TestCase
             'hateoas-resource',
             ['foo' => 'bar'],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo'))
+                Link::to('foo/1', Type::get('Foo'))
             )
         );
 
@@ -105,8 +105,8 @@ class formatting_the_resource_as_json extends TestCase
         $resource = new HateoasResource(
             ['why' => 'not', 'more' => 'stuff'],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo')),
-                Link::to('bar', new TestRelation('Bar'))
+                Link::to('foo/1', Type::get('Foo')),
+                Link::to('bar', Type::get('Bar'))
             )
         );
 
@@ -139,7 +139,7 @@ class formatting_the_resource_as_json extends TestCase
         $resource = new HateoasResource(
             ['hello' => 'goodbye'],
             Links::provide(
-                Link::to('do/something', new TestRelation('Foo', false))
+                Link::to('do/something', Type::post('Foo'))
             )
         );
 
@@ -166,8 +166,8 @@ class formatting_the_resource_as_json extends TestCase
         $resource = new HateoasResource(
             ['links' => []],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo')),
-                Link::to('bar', new TestRelation('Bar'))
+                Link::to('foo/1', Type::get('Foo')),
+                Link::to('bar', Type::get('Bar'))
             )
         );
 

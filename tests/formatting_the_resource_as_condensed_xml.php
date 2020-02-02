@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Stratadox\RestResource\BasicResource;
 use Stratadox\RestResource\BasicSingularizer;
+use Stratadox\RestResource\Type;
 use Stratadox\RestResource\Test\Fixture\HateoasResource;
 use Stratadox\RestResource\Test\Fixture\MinimalResource;
 use Stratadox\RestResource\Test\Fixture\Profile;
-use Stratadox\RestResource\Test\Fixture\TestRelation;
 use Stratadox\RestResource\CondensedXmlFormatter;
 use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
@@ -48,7 +48,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
             'hateoas-resource',
             ['foo' => 'bar'],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo'))
+                Link::to('foo/1', Type::get('Foo'))
             )
         );
 
@@ -151,7 +151,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
         $resource = new HateoasResource(
             ['foo' => 'bar'],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo'))
+                Link::to('foo/1', Type::get('Foo'))
             )
         );
 
@@ -172,8 +172,8 @@ class formatting_the_resource_as_condensed_xml extends TestCase
         $resource = new HateoasResource(
             ['why' => 'not', 'more' => 'stuff'],
             Links::provide(
-                Link::to('foo/1', new TestRelation('Foo')),
-                Link::to('bar', new TestRelation('Bar'))
+                Link::to('foo/1', Type::get('Foo')),
+                Link::to('bar', Type::get('Bar'))
             )
         );
 
@@ -232,7 +232,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
         $resource = new HateoasResource(
             ['hello' => 'goodbye'],
             Links::provide(
-                Link::to('do/something', new TestRelation('Foo', false))
+                Link::to('do/something', Type::post('Foo'))
             )
         );
 
@@ -329,7 +329,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
         $resource = new HateoasResource(
             ['travaux' => [['nom' => 'foo'], ['nom' => 'bar']]],
             Links::provide(
-                Link::to('foo', new TestRelation('Foo'))
+                Link::to('foo', Type::get('Foo'))
             )
         );
 
@@ -359,7 +359,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
                 'mesdames' => ['Alice', 'Barbara', 'Christina'],
             ],
             Links::provide(
-                Link::to('foo', new TestRelation('Foo'))
+                Link::to('foo', Type::get('Foo'))
             )
         );
 

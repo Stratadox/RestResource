@@ -15,10 +15,10 @@ Resources formatted as json output:
 <?php
 
 use Stratadox\RestResource\BasicResource;
-use Stratadox\RestResource\Test\Fixture\TestRelation;
 use Stratadox\RestResource\DefaultJsonFormatter;
 use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
+use Stratadox\RestResource\Type;
 
 $json = new DefaultJsonFormatter('https://a.server.somewhere/');
 
@@ -26,7 +26,7 @@ $resource = new BasicResource(
     'hateoas-resource',
     ['foo' => 'bar'],
     Links::provide(
-        Link::to('foo/1', new TestRelation('Foo'))
+        Link::to('foo/1', Type::get('Foo'))
     )
 );
 
@@ -53,10 +53,10 @@ The same resource, now formatted as xml output:
 <?php
 
 use Stratadox\RestResource\BasicResource;
-use Stratadox\RestResource\Test\Fixture\TestRelation;
 use Stratadox\RestResource\DefaultXmlFormatter;
 use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
+use Stratadox\RestResource\Type;
 
 $xml = new DefaultXmlFormatter('https://a.server.somewhere/');
 
@@ -64,7 +64,7 @@ $resource = new BasicResource(
     'hateoas-resource',
     ['foo' => 'bar'],
     Links::provide(
-        Link::to('foo/1', new TestRelation('Foo'))
+        Link::to('foo/1', Type::get('Foo'))
     )
 );
 
@@ -92,9 +92,9 @@ The same resource again, now formatted as xml with less verbosity:
 
 use Stratadox\RestResource\BasicResource;
 use Stratadox\RestResource\CondensedXmlFormatter;
-use Stratadox\RestResource\Test\Fixture\TestRelation;
 use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
+use Stratadox\RestResource\Type;
 
 $xml = new CondensedXmlFormatter('https://a.server.somewhere/');
 
@@ -102,7 +102,7 @@ $resource = new BasicResource(
     'hateoas-resource',
     ['foo' => 'bar'],
     Links::provide(
-        Link::to('foo/1', new TestRelation('Foo'))
+        Link::to('foo/1', Type::get('Foo'))
     )
 );
 
