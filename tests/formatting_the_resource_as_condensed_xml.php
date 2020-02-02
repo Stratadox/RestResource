@@ -26,7 +26,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
 
     protected function setUp(): void
     {
-        $this->xml = new CondensedXmlFormatter('http://foo/');
+        $this->xml = CondensedXmlFormatter::fromBaseUri('http://foo/');
     }
 
     /** @test */
@@ -413,7 +413,7 @@ class formatting_the_resource_as_condensed_xml extends TestCase
     /** @test */
     function formatting_a_resource_without_inflection_magic()
     {
-        $xml = new CondensedXmlFormatter('http://foo/', new BasicSingularizer());
+        $xml = CondensedXmlFormatter::withSingularizer('http://foo/', new BasicSingularizer());
         $resource = new HateoasResource(
             [
                 'onlar' => ['Alice', 'Alfred', 'Bob', 'Barbara', 'Charlie', 'Christina'],

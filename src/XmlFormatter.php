@@ -17,10 +17,15 @@ abstract class XmlFormatter implements ResourceFormatter
     /** @var Singularizer */
     protected $singularizer;
 
-    public function __construct(string $baseUri, Singularizer $singularizer = null)
+    private function __construct(string $baseUri, Singularizer $singularizer = null)
     {
         $this->baseUri = $baseUri;
         $this->singularizer = $singularizer ?: BoogieSingularizer::default();
+    }
+
+    public static function fromBaseUri(string $baseUri): ResourceFormatter
+    {
+        return new static($baseUri, BoogieSingularizer::default());
     }
 
     public static function in(
@@ -28,6 +33,13 @@ abstract class XmlFormatter implements ResourceFormatter
         string $baseUri
     ): ResourceFormatter {
         return new static($baseUri, BoogieSingularizer::in($locale));
+    }
+
+    public static function withSingularizer(
+        string $baseUri,
+        Singularizer $singularizer
+    ): ResourceFormatter {
+        return new static($baseUri, $singularizer);
     }
 
     public function from(RestResource $resource): string

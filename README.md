@@ -20,7 +20,7 @@ use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
 use Stratadox\RestResource\Type;
 
-$json = new DefaultJsonFormatter('https://a.server.somewhere/');
+$json = DefaultJsonFormatter::fromBaseUri('https://a.server.somewhere/');
 
 $resource = new BasicResource(
     'hateoas-resource',
@@ -58,7 +58,7 @@ use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
 use Stratadox\RestResource\Type;
 
-$xml = new DefaultXmlFormatter('https://a.server.somewhere/');
+$xml = DefaultXmlFormatter::fromBaseUri('https://a.server.somewhere/');
 
 $resource = new BasicResource(
     'hateoas-resource',
@@ -96,7 +96,7 @@ use Stratadox\RestResource\Link;
 use Stratadox\RestResource\Links;
 use Stratadox\RestResource\Type;
 
-$xml = new CondensedXmlFormatter('https://a.server.somewhere/');
+$xml = CondensedXmlFormatter::fromBaseUri('https://a.server.somewhere/');
 
 $resource = new BasicResource(
     'hateoas-resource',
@@ -220,7 +220,7 @@ use Stratadox\RestResource\BasicSingularizer;
 use Stratadox\RestResource\DefaultXmlFormatter;
 use Stratadox\RestResource\Links;
 
-$xml = new DefaultXmlFormatter('/', new BasicSingularizer());
+$xml = DefaultXmlFormatter::withSingularizer('/', new BasicSingularizer());
 
 $resource = new BasicResource(
     'people-resource',
@@ -258,7 +258,7 @@ use Stratadox\RestResource\BasicSingularizer;
 use Stratadox\RestResource\CondensedXmlFormatter;
 use Stratadox\RestResource\Links;
 
-$xml = new CondensedXmlFormatter('/', new BasicSingularizer());
+$xml = CondensedXmlFormatter::withSingularizer('/', new BasicSingularizer());
 
 $resource = new BasicResource(
     'people-resource',

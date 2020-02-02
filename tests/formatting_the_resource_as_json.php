@@ -25,7 +25,7 @@ class formatting_the_resource_as_json extends TestCase
 
     protected function setUp(): void
     {
-        $this->json = new DefaultJsonFormatter('server/');
+        $this->json = DefaultJsonFormatter::fromBaseUri('server/');
     }
 
     /** @test */

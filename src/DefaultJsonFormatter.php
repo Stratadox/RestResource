@@ -15,9 +15,14 @@ final class DefaultJsonFormatter implements ResourceFormatter
     /** @var string */
     private $baseUri;
 
-    public function __construct(string $baseUri)
+    private function __construct(string $baseUri)
     {
         $this->baseUri = $baseUri;
+    }
+
+    public static function fromBaseUri(string $baseUri): ResourceFormatter
+    {
+        return new self($baseUri);
     }
 
     public function from(RestResource $resource): string

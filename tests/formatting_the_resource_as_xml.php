@@ -28,7 +28,7 @@ class formatting_the_resource_as_xml extends TestCase
 
     protected function setUp(): void
     {
-        $this->xml = new DefaultXmlFormatter('server/');
+        $this->xml = DefaultXmlFormatter::fromBaseUri('server/');
     }
 
     /** @test */
@@ -490,7 +490,7 @@ class formatting_the_resource_as_xml extends TestCase
     /** @test */
     function formatting_a_resource_with_link_and_both_French_and_Turkish_key_names()
     {
-        $xml = new DefaultXmlFormatter('server/', new BoogieSingularizer(
+        $xml = DefaultXmlFormatter::withSingularizer('server/', new BoogieSingularizer(
             Inflector::get('tr'),
             Inflector::get('fr'),
             Inflector::get('en')
@@ -542,7 +542,7 @@ class formatting_the_resource_as_xml extends TestCase
     /** @test */
     function formatting_a_resource_without_inflection_magic()
     {
-        $xml = new DefaultXmlFormatter('server/', new BasicSingularizer());
+        $xml = DefaultXmlFormatter::withSingularizer('server/', new BasicSingularizer());
         $resource = new HateoasResource(
             [
                 'onlar' => ['Alice', 'Alfred', 'Bob', 'Barbara', 'Charlie', 'Christina'],
